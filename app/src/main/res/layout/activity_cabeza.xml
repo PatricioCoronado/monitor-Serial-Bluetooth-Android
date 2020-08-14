@@ -2,17 +2,16 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".CabezaActivity">
 
     <EditText
         android:id="@+id/comando"
         android:layout_width="333dp"
         android:layout_height="46dp"
         android:layout_marginTop="160dp"
-        android:text="*IDN"
+        android:text="err?"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,46 +19,23 @@
 
     <EditText
         android:id="@+id/respuesta"
-        android:layout_width="360dp"
-        android:layout_height="42dp"
+        android:layout_width="256dp"
+        android:layout_height="44dp"
         android:layout_marginTop="72dp"
         android:background="@android:drawable/editbox_background"
         android:text="respuesta"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/send" />
+        app:layout_constraintTop_toBottomOf="@+id/subir" />
 
     <Button
-        android:id="@+id/send"
+        android:id="@+id/subir"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:text="Send"
+        android:layout_marginTop="72dp"
+        android:text="Send2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/comando" />
-
-    <Button
-        android:id="@+id/open"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="192dp"
-        android:text="Open"
-        app:layout_constraintEnd_toStartOf="@+id/close"
-        app:layout_constraintHorizontal_bias="0.475"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/respuesta" />
-
-    <Button
-        android:id="@+id/close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="64dp"
-        android:text="Close"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/open" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

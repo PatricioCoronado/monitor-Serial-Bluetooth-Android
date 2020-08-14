@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="texto">14dp</dimen>
+    <dimen name="largo_boton">88dp</dimen>
+    <dimen name="alto_boton">48dp</dimen>
+    <dimen name="text_boton">12sp</dimen>
+    <dimen name="android_width">64dp</dimen>
+    <dimen name="largo_texto_l">312dp</dimen>
+    <dimen name="alto_texto_l">48dp</dimen>
+    <dimen name="largo_texto_c">88dp</dimen>
+    <dimen name="alto_texto_c">48dp</dimen>
+    <dimen name="cuadro_grafico">240dp</dimen>
+    <dimen name="padding_grafico">8dp</dimen>
+    <dimen name="largo_etiqueta">82dp</dimen>
+    <dimen name="alto_etiqueta">32dp</dimen>
+</resources>

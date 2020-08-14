@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/ tools"
+    tools:context=".BaseActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <item android:title="version"
+        android:id="@+id/version"
+        android:orderInCategory="5"/>
+
+    <item
+        android:id="@+id/error"
+        android:icon="@android:drawable/ic_menu_help"
+        android:orderInCategory="15"
+        android:title="error"
+        app:showAsAction="always|collapseActionView" />
+
+    <item
+        android:id="@+id/acelerometro"
+        android:icon="@android:drawable/ic_menu_compass"
+        android:orderInCategory="10"
+        android:title="acelerómetro"
+        app:showAsAction="always|collapseActionView" />
+</menu>
