@@ -1,14 +1,17 @@
 package com.segainvex.mibluetooth;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,15 +23,15 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.os.Vibrator;
 import android.widget.Toast;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
-
 public class BaseActivity extends AppCompatActivity
 {
+    private static final String TAG = "DispositivosVinculados";
+    SharedPreferences preferencias;
     LinearLayout graficoZ;
     Grafico grafico;
     private Respuestas recibido =new Respuestas();
@@ -46,15 +49,37 @@ public class BaseActivity extends AppCompatActivity
     private Switch z2;
     private Switch z3;
     private int motorActivo;
+    private boolean  movimientoDiscreto;
     //Componentes Bluetooth
     BluetoothAdapter miBluetoothAdapter =null;//La radio Bluetooth
     BluetoothSocket miSocket = null;
     BluetoothDevice miDevice;//Para guardar el dispositivo vinculado a utilizar
-    final int REQUEST_ENABLE_BT=1;
+    final int REQUEST_ENABLE_BT=9;
     //Thread workerThread;
     private ConnectedThread miThread;
     Handler miHandler;//Para administrar los datos recibidos en un handler
     private static final UUID BTMODULEUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    private int pasosMovimientoDiscreto;
+
+    /**********************************************************************
+     * onActivityResult
+     **********************************************************************/
+/*
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode,resultCode,data);
+        //Si no se habilita el Bluetooth por el usuario salimos
+
+        if (requestCode == REQUEST_ENABLE_BT) {
+            if (resultCode != RESULT_OK) //Si no se activa el bluetooth salimos
+            {
+                Toast.makeText(this, "No se ha activado el Bluetooth", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+    }//onActivityResult
+*/
     /********************************************************
      *          onCreate
     * *******************************************************/
@@ -75,7 +100,7 @@ public class BaseActivity extends AppCompatActivity
         parar = (Button) findViewById(R.id.parar);
         bajar = (Button) findViewById(R.id.bajar);
         z1 = (Switch) findViewById(R.id.swZ1);
-        z2 = (Switch) findViewById(R.id.swZ3);
+        z2 = (Switch) findViewById(R.id.swZ2);
         z3 = (Switch) findViewById(R.id.swZ3);
         motorActivo=7;
         //Velocidad seekbar y métodos asociados
@@ -90,21 +115,33 @@ public class BaseActivity extends AppCompatActivity
             public void onStartTrackingTouch(SeekBar seekBar) {}
             public void onStopTrackingTouch(SeekBar seekBar){}
         });
+        //Preferencias
+        preferencias = PreferenceManager.getDefaultSharedPreferences(this);
         //Inicializa el gráfico y pinta el fondo
         graficoZ = (LinearLayout) findViewById(R.id.grafico_z);
         grafico = new Grafico(this);
         graficoZ.addView(grafico);
+        //VerificarEstadoBT();
         //Obtenemos el Bluetooth adapter
+        /*
         miBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if(miBluetoothAdapter == null){finish();}//Si no hay Bluetooth salimos
+        if(miBluetoothAdapter == null)//Si no hay Bluetooth en el sistema salimos
+        {
+            Toast.makeText(this, "El dispositivo no tiene Bluetooth", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
 
         // Habilitación del Bluetooth
         if(!miBluetoothAdapter.isEnabled())
         {
-            Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBluetooth,REQUEST_ENABLE_BT);
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             //El resultado del intent implicito se gestiona en onActivityResult
         }
+        */
+
+
         /*****************************************************************
          * Gestión del mensaje recibido
          * Handler para recibir mensajes del thread del bluetooth
@@ -184,11 +221,13 @@ public class BaseActivity extends AppCompatActivity
         if (id == R.id.error) {error(null); return true;}
         if (id == R.id.version) {version(null);return true;}
         if (id == R.id.acelerometro) {acelerometro(null);return true;}
+        if (id == R.id.preferencias){lanzarPreferencias();return true;}
         return super.onOptionsItemSelected(item);
     }
     /**********************************************************************
      * Métodos de ActivityMain
     **********************************************************************/
+
     /*********************************************************************
      * Procesa la respuesta del acelerómetro
      * *******************************************************************/
@@ -211,18 +250,8 @@ public class BaseActivity extends AppCompatActivity
             }
         }
     }
-    /**********************************************************************
-     * onActivityResult
-     **********************************************************************/
-        @Override
-        protected void onActivityResult(int requestCode, int resultCode, Intent data)
-        {
-            super.onActivityResult(requestCode,resultCode,data);
-            //Si no se habilita el Bluetooth por el usuario salimos
-            if (requestCode == REQUEST_ENABLE_BT) {
-                if (resultCode != RESULT_OK) {finish();}
-            }
-        }//onActivityResult
+
+
 
     /**********************************************************************
      * onResume. Aquí conectamos el bluetooth y
@@ -232,6 +261,16 @@ public class BaseActivity extends AppCompatActivity
     public void onResume()
     {
         super.onResume();
+        VerificarEstadoBT();
+        /*
+        // Habilitación del Bluetooth
+        if(!miBluetoothAdapter.isEnabled())
+        {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            //El resultado del intent implicito se gestiona en onActivityResult
+        }
+        */
         //Hacemos una lista con los dispositivos vinculados
         Set<BluetoothDevice> bondedDevices = miBluetoothAdapter.getBondedDevices();
         //Si hay algún dispositivo vinculado....
@@ -248,9 +287,21 @@ public class BaseActivity extends AppCompatActivity
                     break;//Sale del bucle for
                 }
             }
-            if(!deviceFound) finish();//Si no está nuestro dispositivo entre los vinculados salimos
+            if(deviceFound==false)
+            {
+                Toast.makeText(this, "La base no está vinculada", Toast.LENGTH_SHORT).show();
+                finish();//Si no está nuestro dispositivo entre los vinculados salimos
+                System.exit(0);
+
+
+            }
         }
-        else finish();//Si no hay dispositivos vinculados con los que conectarse salimos
+        else
+        {
+            Toast.makeText(this, "No hay dispositivos vinculados", Toast.LENGTH_SHORT).show();
+            finish();//Si no hay dispositivos vinculados con los que conectarse salimos
+            System.exit(0);
+        }
        // Cancela cualquier  discovery en proceso
         miBluetoothAdapter.cancelDiscovery();//Cancel cualquier busqueda en proceso
         //Ahora hay que conectar
@@ -259,8 +310,13 @@ public class BaseActivity extends AppCompatActivity
         } catch (IOException e) {e.printStackTrace();}
         try {
             miSocket.connect();//Conectamos el socket. Esto puede llevar un tiempo
-        } catch (IOException e) {e.printStackTrace();}
-        // TODO si no conecta deberíamos salir ¿?
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+            Toast.makeText(this, "No se ha podido conectar con la base", Toast.LENGTH_SHORT).show();
+            this.finish();//Si no hay dispositivos vinculados con los que conectarse salimos
+            System.exit(0);
+        }
         miThread = new ConnectedThread(miSocket,this,miHandler);//Tread para manejar el Bluetooth
         miThread.start();//Ejecuta el thread para administrar la conexión
     }
@@ -299,37 +355,36 @@ public class BaseActivity extends AppCompatActivity
         vibrator.vibrate(Global.TIEMPO_VIBRACION);
     }
     /*********************************************************************
-     * Botón subir: Envía a la base el comando..
+     * Botón subir y bajar: Envía a la base el comando..
      * "MOT:MMP <MotorActivo Resolucion Frecuencia Sentido Pasos>"
      *********************************************************************/
-    public void subir(View view)
+    public void mover(View view)
     {
-        motorActivo = motorActivo();//Lee el motor seleccionado
-        if(motorActivo==0) {
-            Toast.makeText(this, "no hay motor seleccionado", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        String comand = "MOT:MM "+motorActivo+" 256 "+velocidadMotor+" 1\r";
-        comando.setText(comand);
-        miThread.write(comand.getBytes());
-        vibrator.vibrate(Global.TIEMPO_VIBRACION);
-    }
-    /*********************************************************************
-     * Botón enviar: Envía a la base el comando..
-     * "MOT:MMP <MotorActivo Resolucion Frecuencia Sentido Pasos>" o
-     * "MOT:MM <MotorActivo Resolucion Frecuencia Sentido>""
-     *********************************************************************/
-    public void bajar(View view)
-    {
-        motorActivo = motorActivo();//Lee el motor seleccionado
-        if(motorActivo==0) {
-            Toast.makeText(this, "no hay motor seleccionado", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        String comand = "MOT:MM "+motorActivo+" 256 "+velocidadMotor+" 0\r";
-        comando.setText(comand);
-        miThread.write(comand.getBytes());
-        vibrator.vibrate(Global.TIEMPO_VIBRACION);
+            int sentido=0;
+            //El  sentido depende del botón pulsado
+            if(view.equals(bajar)) sentido=0; else sentido = 1;
+            //Busca el motor activo
+            motorActivo = motorActivo();//Lee el motor seleccionado
+            if(motorActivo==0) {
+                Toast.makeText(this, "no hay motor seleccionado", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            //Preferencias. Tipo de movimiento y pasos discretos
+            movimientoDiscreto = preferencias.getBoolean("movimiento",false);
+            String comand;
+            if(movimientoDiscreto)
+            {
+                String pasosDiscretos =  preferencias.getString("pasos","10000");
+                pasosMovimientoDiscreto = Integer.parseInt(pasosDiscretos);
+                comand = "MOT:MMP " + motorActivo + " 256 " + velocidadMotor + " "+ sentido +" " + pasosMovimientoDiscreto +" \r";
+            }
+            else //Movimiento continuo
+            {
+                comand = "MOT:MM " + motorActivo + " 256 " + velocidadMotor + " "+ sentido +"\r";
+            }
+            comando.setText(comand);
+            miThread.write(comand.getBytes());
+            vibrator.vibrate(Global.TIEMPO_VIBRACION);
     }
     /********************************************************************
      * Método para seleccionar el motor activo a partir de los switches
@@ -363,6 +418,15 @@ public class BaseActivity extends AppCompatActivity
     }
     */
     /*********************************************************************
+     * Item del menú preferencias: Abre la ventana de preferencias
+     *********************************************************************/
+    public void lanzarPreferencias()
+    {
+        Intent intentPreferencias;
+        intentPreferencias = new Intent(this, PreferenciasActivity.class);
+        startActivity(intentPreferencias);
+    }
+    /*********************************************************************
      * Item del menú error: Pide error a la base
      *********************************************************************/
     public void error(View view)
@@ -387,11 +451,39 @@ public class BaseActivity extends AppCompatActivity
      *********************************************************************/
     private void acelerometro(View view)
     {
-        String comand =new String("MOT:IAC 100\r");
+        String muestrasString = preferencias.getString("muestrasAcelerometro","100");
+        int muestrasAcelerometro = Integer.parseInt(muestrasString);
+        String comand =new String("MOT:IAC "+ muestrasAcelerometro +" \r");
         comando.setText(comand);
         miThread.write(comand.getBytes());
         vibrator.vibrate(Global.TIEMPO_VIBRACION);
     }
-}//Class
+    /*********************************************************************
+     *Estado del Bluetooth
+     *********************************************************************/
+    private void VerificarEstadoBT()
+    {
+        // Comprueba que el dispositivo tiene Bluetooth y que está encendido.
+        miBluetoothAdapter= BluetoothAdapter.getDefaultAdapter();
+        if(miBluetoothAdapter==null) {
+            Toast.makeText(getBaseContext(), "El dispositivo no soporta Bluetooth", Toast.LENGTH_SHORT).show();
+        } else {
+            if (miBluetoothAdapter.isEnabled()) {
+                Log.d(TAG, "...Bluetooth Activado...");
+            } else {
+                //Solicita al usuario que active Bluetooth
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBtIntent, 1);
+            }
+        }
+    }
+
+
+
+
+
+
 /***************************************************************************
 ****************************************************************************/
+}//class
+

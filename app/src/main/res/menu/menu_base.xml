@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <item android:title="version"
+    <item android:title="versión soft. DUE"
         android:id="@+id/version"
         android:orderInCategory="5"/>
 
@@ -24,4 +24,11 @@
         android:orderInCategory="10"
         android:title="acelerómetro"
         app:showAsAction="always|collapseActionView" />
+
+    <item android:id="@+id/preferencias"
+        android:title="preferencias"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:orderInCategory="4"
+        app:showAsAction="never"/>
+
 </menu>

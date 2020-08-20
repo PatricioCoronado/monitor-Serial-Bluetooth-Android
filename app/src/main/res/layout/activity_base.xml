@@ -35,7 +35,7 @@
     <Button
         android:id="@+id/subir"
         style="@style/boton"
-        android:onClick="subir"
+        android:onClick="mover"
         android:text="@string/text_boton_subir"
         app:layout_constraintEnd_toStartOf="@+id/parar"
         app:layout_constraintHorizontal_bias="0.5"
@@ -45,7 +45,7 @@
     <Button
         android:id="@+id/bajar"
         style="@style/boton"
-        android:onClick="bajar"
+        android:onClick="mover"
         android:text="@string/text_boton_bajar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
