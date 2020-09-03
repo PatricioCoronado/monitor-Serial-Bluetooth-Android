@@ -1,5 +1,7 @@
 package com.segainvex.mibluetooth;
 import android.app.Application;
+import android.bluetooth.BluetoothDevice;
+
 /*************************************************
  * Variables globales a todas las aplicaciones
 ************************************************ */
@@ -28,9 +30,15 @@ class Global extends Application { //Clase estática de Android para variables g
     }
     //public static String miMAC = "98:D3:41:F5:AC:C0";//Base_SPM_20191136
     public static String miMAC = "00:14:03:05:5D:DC";//BT_PCC4
+    //public static String miMAC = "00:15:A6:00:51:4B";//BT18
     public static final byte  LF = 10;//Nueva línea  '\n'
     public static final byte  CR = 13;//Retorno de carro '\r'
     public static final int MAX_LON_STRING = 64;
     public static int TIEMPO_VIBRACION = 50;
     public static int VELOCIDAD_INICIAL=50;//Velocidad motores inicial
+    public static final int BASE_ACTIVITY = 100;
+    public static final int NUEVO_BLUETOOTH = 200;
+    public static final int FALLO_CONEXION = 201;
+    public static BluetoothDevice deviceBase;//Dispositivo bluetooth remoto de la base a utilizar
+    public static boolean traficoVisible=true;
 }

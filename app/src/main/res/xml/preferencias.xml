@@ -30,4 +30,11 @@
             android:entryValues="@array/numeroMuestras"
             android:defaultValue="100"/>
     <!--</PreferenceScreen>-->
+    <EditTextPreference
+       android:key="mac"
+       android:title="MAC del bluetooth"
+       android:summary="Mac del Bluetooth que va a utilizar esta base"
+       android:inputType="text"
+       android:text="00:00:00:00:00:00"
+       android:defaultValue="00:00:00:00:00:00"/>
 </PreferenceScreen>

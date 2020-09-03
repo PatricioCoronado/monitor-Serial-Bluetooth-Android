@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -34,13 +35,13 @@ public class BaseActivity extends AppCompatActivity
     SharedPreferences preferencias;
     LinearLayout graficoZ;
     Grafico grafico;
-    private Respuestas recibido =new Respuestas();
     private Vibrator vibrator;
     //Componentes gráficos
     private TextView respuesta;
     private TextView GX;//Para mostrar las coordenadas del acelerómetro
     private TextView GY;
     private EditText comando;
+    private TextView baseConectada;
     private Button enviar;
     private Button subir, bajar, parar;
     private SeekBar velocidad;
@@ -50,20 +51,17 @@ public class BaseActivity extends AppCompatActivity
     private Switch z3;
     private int motorActivo;
     private boolean  movimientoDiscreto;
+    private int pasosMovimientoDiscreto;
     //Componentes Bluetooth
+    BluetoothDevice miDevice = null;//Bluetooth device que representa el dispositivo remoto
+    BluetoothSocket miSocket = null;//Para enchufar el Bluetooth device a la radio Bluetooth
     BluetoothAdapter miBluetoothAdapter =null;//La radio Bluetooth
-    BluetoothSocket miSocket = null;
-    BluetoothDevice miDevice;//Para guardar el dispositivo vinculado a utilizar
-    final int REQUEST_ENABLE_BT=9;
-    //Thread workerThread;
-    private ConnectedThread miThread;
+    private ConnectedThread miThread;//Hilo que lee y escribe la entrada del bluetooth
     Handler miHandler;//Para administrar los datos recibidos en un handler
     private static final UUID BTMODULEUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    private int pasosMovimientoDiscreto;
-
-    /**********************************************************************
+    /************************************************************
      * onActivityResult
-     **********************************************************************/
+     ************************************************************/
 /*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -80,18 +78,19 @@ public class BaseActivity extends AppCompatActivity
         }
     }//onActivityResult
 */
-    /********************************************************
+    /************************************************************
      *          onCreate
-    * *******************************************************/
+    * ***********************************************************/
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         comando = (EditText) findViewById(R.id.comando);
+        baseConectada = (TextView) findViewById(R.id.base_conectada);
         respuesta = (TextView) findViewById(R.id.respuesta);
         GX= (TextView) findViewById(R.id.textViewX);
         GY= (TextView) findViewById(R.id.textViewY);
@@ -121,27 +120,6 @@ public class BaseActivity extends AppCompatActivity
         graficoZ = (LinearLayout) findViewById(R.id.grafico_z);
         grafico = new Grafico(this);
         graficoZ.addView(grafico);
-        //VerificarEstadoBT();
-        //Obtenemos el Bluetooth adapter
-        /*
-        miBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if(miBluetoothAdapter == null)//Si no hay Bluetooth en el sistema salimos
-        {
-            Toast.makeText(this, "El dispositivo no tiene Bluetooth", Toast.LENGTH_SHORT).show();
-            finish();
-        }
-
-
-        // Habilitación del Bluetooth
-        if(!miBluetoothAdapter.isEnabled())
-        {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-            //El resultado del intent implicito se gestiona en onActivityResult
-        }
-        */
-
-
         /*****************************************************************
          * Gestión del mensaje recibido
          * Handler para recibir mensajes del thread del bluetooth
@@ -206,7 +184,7 @@ public class BaseActivity extends AppCompatActivity
         };
     }//onCreate
     /**********************************************************************
-     *                          MENU
+     *                        Inflado del menú
      * *******************************************************************/
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_base, menu);
@@ -218,12 +196,15 @@ public class BaseActivity extends AppCompatActivity
     @Override public boolean onOptionsItemSelected(MenuItem item)
     {
         int id = item.getItemId();
-        if (id == R.id.error) {error(null); return true;}
+        if (id == R.id.error) {pideError(null); return true;}
         if (id == R.id.version) {version(null);return true;}
         if (id == R.id.acelerometro) {acelerometro(null);return true;}
         if (id == R.id.preferencias){lanzarPreferencias();return true;}
+        if (id == R.id.busca_bluetooth){cambiaDeviceBluetooth(Global.NUEVO_BLUETOOTH);return true;}
+        if (id == R.id.ver_trafico){monitorBluetooth(false);return true;}
         return super.onOptionsItemSelected(item);
     }
+
     /**********************************************************************
      * Métodos de ActivityMain
     **********************************************************************/
@@ -250,9 +231,6 @@ public class BaseActivity extends AppCompatActivity
             }
         }
     }
-
-
-
     /**********************************************************************
      * onResume. Aquí conectamos el bluetooth y
      * arrancamos el thred que administra el tráfico de datos
@@ -261,48 +239,13 @@ public class BaseActivity extends AppCompatActivity
     public void onResume()
     {
         super.onResume();
-        VerificarEstadoBT();
-        /*
-        // Habilitación del Bluetooth
-        if(!miBluetoothAdapter.isEnabled())
-        {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-            //El resultado del intent implicito se gestiona en onActivityResult
-        }
-        */
-        //Hacemos una lista con los dispositivos vinculados
-        Set<BluetoothDevice> bondedDevices = miBluetoothAdapter.getBondedDevices();
-        //Si hay algún dispositivo vinculado....
-        if(bondedDevices.size() > 0)
-        {
-            boolean deviceFound=false;
-            for(BluetoothDevice device : bondedDevices)//buscamos el nuestro por la MAC o nombre
-            {
-                //if(device.getName().equals("nombre dispositivo”))
-                if(device.getAddress().equals(Global.miMAC))// ejemplo de MAC
-                {
-                    deviceFound=true;
-                    miDevice = device;
-                    break;//Sale del bucle for
-                }
-            }
-            if(deviceFound==false)
-            {
-                Toast.makeText(this, "La base no está vinculada", Toast.LENGTH_SHORT).show();
-                finish();//Si no está nuestro dispositivo entre los vinculados salimos
-                System.exit(0);
-
-
-            }
-        }
-        else
-        {
-            Toast.makeText(this, "No hay dispositivos vinculados", Toast.LENGTH_SHORT).show();
-            finish();//Si no hay dispositivos vinculados con los que conectarse salimos
-            System.exit(0);
-        }
-       // Cancela cualquier  discovery en proceso
+        //Aquí se llega con un device de los que están vinculados desde la BluetoothActivity
+        //O desde onPause
+        VerificarEstadoBT();//Si desde onPause se ha desactivado el bluetooth hay que verificarlo
+        miDevice=Global.deviceBase;
+        monitorBluetooth(true);//Estado por defecto
+        baseConectada.setText(miDevice.getName());
+        // Cancela cualquier  discovery en proceso
         miBluetoothAdapter.cancelDiscovery();//Cancel cualquier busqueda en proceso
         //Ahora hay que conectar
         try {//Como sin bluetooth no podemos seguir no hace falta un tread secundario
@@ -313,9 +256,7 @@ public class BaseActivity extends AppCompatActivity
         } catch (IOException e)
         {
             e.printStackTrace();
-            Toast.makeText(this, "No se ha podido conectar con la base", Toast.LENGTH_SHORT).show();
-            this.finish();//Si no hay dispositivos vinculados con los que conectarse salimos
-            System.exit(0);
+            cambiaDeviceBluetooth(Global.FALLO_CONEXION);//Resetea las preferencias y solicita un nuevo dispositivo
         }
         miThread = new ConnectedThread(miSocket,this,miHandler);//Tread para manejar el Bluetooth
         miThread.start();//Ejecuta el thread para administrar la conexión
@@ -327,7 +268,7 @@ public class BaseActivity extends AppCompatActivity
     {
         super.onPause();
        // Cuando se sale de la aplicación esta parte permite que no se deje abierto el socket
-        miThread.desconectaBluetooth();//miSocket.close();
+        miThread.desconectaBluetooth();//Desenchufa el bluetooth
     }
     /*********************************************************************
     * MÉTODOS DE LA APLICACION
@@ -396,7 +337,7 @@ public class BaseActivity extends AppCompatActivity
         Boolean z2On =  z2.isChecked();
         Boolean z3On =  z3.isChecked();
         //Analiza el estado y devuelve el motor activo
-        if(z1On && z2On && z2On) return 7;
+        if(z1On && z2On && z3On) return 7;
         if(z1On && !z2On && !z3On) return 1;
         if(!z1On && z2On && !z3On) return 2;
         if(!z1On && !z2On && z3On) return 3;
@@ -418,7 +359,33 @@ public class BaseActivity extends AppCompatActivity
     }
     */
     /*********************************************************************
-     * Item del menú preferencias: Abre la ventana de preferencias
+     *                  Métodos del menú
+    ******************************************************************* */
+    /********************************************************************
+     *       Método para hacer visible o no el tráfico
+     *       de comandos y respuestas del bluetooth
+     *********************************************************************/
+    private void monitorBluetooth(boolean porDefecto)
+    {
+        if (Global.traficoVisible==false  || porDefecto)
+        {
+            Global.traficoVisible=true;
+            comando.setVisibility(View.VISIBLE);
+            respuesta.setVisibility(View.VISIBLE);
+            enviar.setVisibility(View.VISIBLE);
+            baseConectada.setVisibility(View.INVISIBLE);
+         }
+        else
+        {
+            Global.traficoVisible=false;
+            comando.setVisibility(View.INVISIBLE);
+            respuesta.setVisibility(View.INVISIBLE);
+            enviar.setVisibility(View.INVISIBLE);
+            baseConectada.setVisibility(View.VISIBLE);
+       }
+    }
+    /*********************************************************************
+     * Item del menú preferencias: carga el fragment de preferencias
      *********************************************************************/
     public void lanzarPreferencias()
     {
@@ -429,7 +396,7 @@ public class BaseActivity extends AppCompatActivity
     /*********************************************************************
      * Item del menú error: Pide error a la base
      *********************************************************************/
-    public void error(View view)
+    public void pideError(View view)
     {
         String comand =new String("ERR?\r");
         comando.setText(comand);
@@ -459,30 +426,35 @@ public class BaseActivity extends AppCompatActivity
         vibrator.vibrate(Global.TIEMPO_VIBRACION);
     }
     /*********************************************************************
-     *Estado del Bluetooth
+     * Item del menú busca_bluetooth
+     ********************************************************************/
+    private void cambiaDeviceBluetooth(int motivoCambio) {
+        SharedPreferences.Editor editor = preferencias.edit();
+        editor.putString("mac", "00:00:00:00:00:00");//Resetea la mac en preferencia
+        editor.apply();
+        //Devuelve el control a BluetoothActivity
+        Intent intent = new Intent();
+        setResult(motivoCambio, intent);
+        finish();//Regresa al BluetoothActivity para que busque un nuevo device bluetooth
+    }
+    /*********************************************************************
+     * Estado del Bluetooth
+     * Comprueba que el  Bluetooth está activado. Si no, regresa
+     * a BluetoothActivity
      *********************************************************************/
     private void VerificarEstadoBT()
     {
-        // Comprueba que el dispositivo tiene Bluetooth y que está encendido.
         miBluetoothAdapter= BluetoothAdapter.getDefaultAdapter();
-        if(miBluetoothAdapter==null) {
-            Toast.makeText(getBaseContext(), "El dispositivo no soporta Bluetooth", Toast.LENGTH_SHORT).show();
-        } else {
-            if (miBluetoothAdapter.isEnabled()) {
-                Log.d(TAG, "...Bluetooth Activado...");
-            } else {
-                //Solicita al usuario que active Bluetooth
-                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBtIntent, 1);
-            }
-        }
+       if (miBluetoothAdapter.isEnabled())
+       {
+                Log.d(TAG, "...Bluetooth Activado...");//Está correcto
+       }
+       else //Si el bluetooth se ha desactivado vamos a  BluetoothActivity
+       {
+                finish();//Regresa a BluetoothActivity
+       }
+
     }
-
-
-
-
-
-
 /***************************************************************************
 ****************************************************************************/
 }//class

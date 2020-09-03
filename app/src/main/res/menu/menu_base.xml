@@ -31,4 +31,17 @@
         android:orderInCategory="4"
         app:showAsAction="never"/>
 
+    <item android:id="@+id/busca_bluetooth"
+        android:title="bluetooth"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:orderInCategory="4"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/ver_trafico"
+        android:title="monitor bluetooth"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:orderInCategory="4"
+        app:showAsAction="never"/>
+
 </menu>
+

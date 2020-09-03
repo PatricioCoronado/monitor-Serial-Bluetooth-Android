@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="texto">14dp</dimen>
+    <dimen name="texto_grande">16sp</dimen>
     <dimen name="largo_boton">88dp</dimen>
     <dimen name="alto_boton">48dp</dimen>
     <dimen name="text_boton">12sp</dimen>
@@ -13,4 +14,7 @@
     <dimen name="padding_grafico">8dp</dimen>
     <dimen name="largo_etiqueta">82dp</dimen>
     <dimen name="alto_etiqueta">32dp</dimen>
+    <dimen name="soporte_corto_base">352dp</dimen>
+    <dimen name="soporte_largo_base">452dp</dimen>
+
 </resources>

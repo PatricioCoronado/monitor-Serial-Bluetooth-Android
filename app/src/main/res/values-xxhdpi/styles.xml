@@ -22,6 +22,13 @@
         <item name="android:layout_width">@dimen/largo_texto_l</item>
         <item name="android:layout_height">@dimen/alto_texto_l</item>
     </style>
+    <style name="base_conectada">
+        <item name="android:layout_width">@dimen/largo_texto_l</item>
+        <item name="android:layout_height">@dimen/alto_texto_l</item>
+        <item name = "android:textSize">@dimen/texto_grande</item>
+        <item name = "android:visibility">invisible</item>
+
+    </style>
     <style name="cuadro_texto_c">
         <item name="android:layout_width">@dimen/largo_texto_c</item>
         <item name="android:layout_height">@dimen/alto_texto_c</item>
@@ -37,7 +44,6 @@
         <item name="android:layout_width">@dimen/largo_etiqueta</item>
         <item name="android:layout_height">@dimen/alto_etiqueta</item>
     </style>
-
 
 
 

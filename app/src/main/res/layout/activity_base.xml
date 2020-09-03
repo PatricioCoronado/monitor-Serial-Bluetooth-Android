@@ -7,6 +7,16 @@
     android:layout_height="match_parent"
     tools:context=".BaseActivity">
 
+    <TextView
+        android:id="@+id/base_conectada"
+        style="@style/base_conectada"
+        android:layout_marginBottom="32dp"
+        android:lines="1"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -139,11 +149,11 @@
         style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="233dp"
         android:layout_height="32dp"
-        android:layout_marginTop="348dp"
+        android:layout_marginTop="364dp"
         android:max="5"
         android:progress="4"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.834"
+        app:layout_constraintHorizontal_bias="0.662"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

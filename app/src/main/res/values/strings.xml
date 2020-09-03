@@ -5,4 +5,6 @@
     <string name="text_boton_parar">parar</string>
     <string name="texto_comando">*idn?</string>
     <string name="texto_respuesta"></string>
+    <string name="error_conexion">No se ha podido conectar con la base, selecciona otro dispositivo</string>
+    <string name="nuevo_bluetooth">Selecciona otro dispositivo</string>
 </resources>
