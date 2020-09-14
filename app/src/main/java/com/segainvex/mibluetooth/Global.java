@@ -41,4 +41,16 @@ class Global extends Application { //Clase estática de Android para variables g
     public static final int FALLO_CONEXION = 201;
     public static BluetoothDevice deviceBase;//Dispositivo bluetooth remoto de la base a utilizar
     public static boolean traficoVisible=true;
+    //Motores
+    public static int Z1=1;
+    public static int Z2=2;
+    public static int Z3=3;
+    public static int Z1Z2=4;
+    public static int Z1Z3=5;
+    public static int Z2Z3=6;
+    public static int Z1Z2Z3=7;
+    public static int fotodiodoX=10;
+    public static int fotodiodoY=13;
+    public static int laserX=11;
+    public static int laserY=12;
 }

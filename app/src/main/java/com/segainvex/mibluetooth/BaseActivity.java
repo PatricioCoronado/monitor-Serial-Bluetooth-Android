@@ -40,9 +40,7 @@ public class BaseActivity extends AppCompatActivity
     private TextView respuesta;
     private TextView GX;//Para mostrar las coordenadas del acelerómetro
     private TextView GY;
-    private EditText comando;
-    private TextView baseConectada;
-    private Button enviar;
+    private TextView comando;
     private Button subir, bajar, parar;
     private SeekBar velocidad;
     private int velocidadMotor;
@@ -89,12 +87,11 @@ public class BaseActivity extends AppCompatActivity
         Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        comando = (EditText) findViewById(R.id.comando);
-        baseConectada = (TextView) findViewById(R.id.base_conectada);
+        comando = (TextView) findViewById(R.id.comando);
         respuesta = (TextView) findViewById(R.id.respuesta);
         GX= (TextView) findViewById(R.id.textViewX);
         GY= (TextView) findViewById(R.id.textViewY);
-        enviar = (Button) findViewById(R.id.enviar);
+        //enviar = (Button) findViewById(R.id.enviar);
         subir = (Button) findViewById(R.id.subir);
         parar = (Button) findViewById(R.id.parar);
         bajar = (Button) findViewById(R.id.bajar);
@@ -197,11 +194,11 @@ public class BaseActivity extends AppCompatActivity
     {
         int id = item.getItemId();
         if (id == R.id.error) {pideError(null); return true;}
+        if (id == R.id.cambio) {cambio(null); return true;}
         if (id == R.id.version) {version(null);return true;}
         if (id == R.id.acelerometro) {acelerometro(null);return true;}
         if (id == R.id.preferencias){lanzarPreferencias();return true;}
         if (id == R.id.busca_bluetooth){cambiaDeviceBluetooth(Global.NUEVO_BLUETOOTH);return true;}
-        if (id == R.id.ver_trafico){monitorBluetooth(false);return true;}
         return super.onOptionsItemSelected(item);
     }
 
@@ -243,8 +240,8 @@ public class BaseActivity extends AppCompatActivity
         //O desde onPause
         VerificarEstadoBT();//Si desde onPause se ha desactivado el bluetooth hay que verificarlo
         miDevice=Global.deviceBase;
-        monitorBluetooth(true);//Estado por defecto
-        baseConectada.setText(miDevice.getName());
+
+
         // Cancela cualquier  discovery en proceso
         miBluetoothAdapter.cancelDiscovery();//Cancel cualquier busqueda en proceso
         //Ahora hay que conectar
@@ -273,9 +270,11 @@ public class BaseActivity extends AppCompatActivity
     /*********************************************************************
     * MÉTODOS DE LA APLICACION
     **********************************************************************/
+
     /*********************************************************************
      * Botón enviar: Envía un comando a la base
     *********************************************************************/
+   /*
     public void enviar(View view)
     {
         String msg = comando.getText().toString();
@@ -285,8 +284,10 @@ public class BaseActivity extends AppCompatActivity
         miThread.write(msg.getBytes());
         vibrator.vibrate(Global.TIEMPO_VIBRACION);
     }
+    */
+
     /*********************************************************************
-     * Botón enviar: Envía a la base el comando "MOT:MP 0"
+     * Botón parar: Envía a la base el comando "MOT:MP 0"
      *********************************************************************/
     public void parar(View view)
     {
@@ -361,29 +362,7 @@ public class BaseActivity extends AppCompatActivity
     /*********************************************************************
      *                  Métodos del menú
     ******************************************************************* */
-    /********************************************************************
-     *       Método para hacer visible o no el tráfico
-     *       de comandos y respuestas del bluetooth
-     *********************************************************************/
-    private void monitorBluetooth(boolean porDefecto)
-    {
-        if (Global.traficoVisible==false  || porDefecto)
-        {
-            Global.traficoVisible=true;
-            comando.setVisibility(View.VISIBLE);
-            respuesta.setVisibility(View.VISIBLE);
-            enviar.setVisibility(View.VISIBLE);
-            baseConectada.setVisibility(View.INVISIBLE);
-         }
-        else
-        {
-            Global.traficoVisible=false;
-            comando.setVisibility(View.INVISIBLE);
-            respuesta.setVisibility(View.INVISIBLE);
-            enviar.setVisibility(View.INVISIBLE);
-            baseConectada.setVisibility(View.VISIBLE);
-       }
-    }
+
     /*********************************************************************
      * Item del menú preferencias: carga el fragment de preferencias
      *********************************************************************/
@@ -392,6 +371,14 @@ public class BaseActivity extends AppCompatActivity
         Intent intentPreferencias;
         intentPreferencias = new Intent(this, PreferenciasActivity.class);
         startActivity(intentPreferencias);
+    }
+    /*********************************************************************
+     * Item del menú: Cambio entre activity de control de base o cabeza
+     *********************************************************************/
+    public void cambio (View view)
+    {
+        Intent intentCabeza =  new Intent(this, CabezaActivity.class);
+        startActivity(intentCabeza);
     }
     /*********************************************************************
      * Item del menú error: Pide error a la base

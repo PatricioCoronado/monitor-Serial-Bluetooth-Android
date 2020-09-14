@@ -16,29 +16,21 @@
         android:orderInCategory="15"
         android:title="cambio"
         app:showAsAction="always|collapseActionView" />
-
     <item
         android:id="@+id/error"
         android:icon="@android:drawable/ic_menu_help"
         android:orderInCategory="15"
         android:title="error"
         app:showAsAction="ifRoom|collapseActionView" />
-
     <item
-        android:id="@+id/acelerometro"
+        android:id="@+id/fotodiodo"
         android:icon="@android:drawable/ic_menu_compass"
         android:orderInCategory="10"
-        android:title="acelerómetro"
+        android:title="fotodiodo"
         app:showAsAction="always|collapseActionView" />
-
-    <item android:id="@+id/preferencias"
+    <item
+        android:id="@+id/preferencias"
         android:title="preferencias"
-        android:icon="@android:drawable/ic_menu_preferences"
-        android:orderInCategory="4"
-        app:showAsAction="never"/>
-
-    <item android:id="@+id/busca_bluetooth"
-        android:title="bluetooth"
         android:icon="@android:drawable/ic_menu_preferences"
         android:orderInCategory="4"
         app:showAsAction="never"/>

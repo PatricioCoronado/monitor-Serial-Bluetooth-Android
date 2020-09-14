@@ -104,6 +104,7 @@ public class BluetoothActivity extends AppCompatActivity {
                 if(device.getAddress().equals(macBase)) //Busca el device cuya MAC coincida con la de preferencias
                     {
                         Global.deviceBase = device;//...es el que hay que utilizar.
+                        //Intent intend = new Intent(BluetoothActivity.this, CabezaActivity.class);
                         Intent intend = new Intent(BluetoothActivity.this, BaseActivity.class);
                         startActivityForResult(intend,Global.BASE_ACTIVITY);
                     }
@@ -134,25 +135,6 @@ public class BluetoothActivity extends AppCompatActivity {
            SharedPreferences.Editor editor = preferencias.edit();
            editor.putString("mac", device.getAddress());
            editor.apply();
-/*
-           final BluetoothDevice deviceSalvar=device;
-           new AlertDialog.Builder(this)
-                   .setTitle("guardar dispositivo")
-                   .setMessage("¿Quieres que sea este el dispositivo por defecto?")
-                   .setPositiveButton("Si", new DialogInterface.OnClickListener()
-                           {
-                               public void onClick(DialogInterface dialog, int whichButton)
-                               {
-                                   SharedPreferences.Editor editor = preferencias.edit();
-                                   editor.putString("mac", deviceSalvar.getAddress());
-                                   editor.apply();
-                               }
-                           }
-                   )//setPositiveButton
-                   .setNegativeButton("No", null)
-                   .show();
-
- */
        }
     /****************************************************************************
      *  función que comprueba el bluetooth del dispositivo y si no está

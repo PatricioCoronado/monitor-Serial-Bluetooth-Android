@@ -29,6 +29,16 @@
             android:entries="@array/muestras"
             android:entryValues="@array/numeroMuestras"
             android:defaultValue="100"/>
+
+    <!--<PreferenceScreen muestras del fotodiodo-->
+    <ListPreference
+        android:key="muestrasFotodiodo"
+        android:title="muestras del fotodiodo"
+        android:summary="número de muestras del fotodiodo que se envía en cada pulsación. Por defecto 100"
+        android:entries="@array/muestras"
+        android:entryValues="@array/numeroMuestras"
+        android:defaultValue="100"/>
+
     <!--</PreferenceScreen>-->
     <EditTextPreference
        android:key="mac"

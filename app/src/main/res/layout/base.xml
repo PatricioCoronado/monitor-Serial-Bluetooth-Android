@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <LinearLayout
+        android:id="@+id/grafico_z"
+        style="@style/grafico"
+        android:layout_width="180dp"
+        android:layout_height="178dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/textViewX"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/textViewX"
+        style="@style/cuadro_texto_c"
+        android:layout_marginStart="80dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/velocidad"
+        app:layout_constraintStart_toStartOf="parent" />
+    <TextView
+        android:id="@+id/textViewY"
+        style="@style/cuadro_texto_c"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.404"
+        app:layout_constraintStart_toEndOf="@+id/textViewX"
+        app:layout_constraintTop_toTopOf="@+id/textViewX" />
+    <Button
+        android:id="@+id/subir"
+        style="@style/boton"
+        android:onClick="mover"
+        android:text="@string/text_boton_subir"
+        app:layout_constraintEnd_toStartOf="@+id/parar"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/parar" />
+    <Button
+        android:id="@+id/bajar"
+        style="@style/boton"
+        android:onClick="mover"
+        android:text="@string/text_boton_bajar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/parar"
+        app:layout_constraintTop_toTopOf="@+id/parar" />
+    <Button
+        android:id="@+id/parar"
+        style="@style/boton"
+        android:layout_marginTop="32dp"
+        android:onClick="parar"
+        android:text="@string/text_boton_parar"
+        app:layout_constraintEnd_toStartOf="@+id/bajar"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/subir"
+        app:layout_constraintTop_toBottomOf="@+id/swZ2" />
+    <Switch
+        android:id="@+id/swZ2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:checked="true"
+        android:text="z2"
+        app:layout_constraintEnd_toStartOf="@+id/swZ3"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/swZ1"
+        app:layout_constraintTop_toBottomOf="@+id/velocidad" />
+    <Switch
+        android:id="@+id/swZ3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="z3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/swZ2"
+        app:layout_constraintTop_toTopOf="@+id/swZ2" />
+    <Switch
+        android:id="@+id/swZ1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="z1"
+        app:layout_constraintEnd_toStartOf="@+id/swZ2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/swZ2" />
+    <TextView
+        android:id="@+id/textVelocidad"
+        style="@style/etiqueta"
+        android:layout_marginEnd="12dp"
+        android:text="velocidad"
+        app:layout_constraintBottom_toBottomOf="@+id/velocidad"
+        app:layout_constraintEnd_toStartOf="@+id/velocidad" />
+    <SeekBar
+        android:id="@+id/velocidad"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="233dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="364dp"
+        android:max="5"
+        android:progress="4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.662"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

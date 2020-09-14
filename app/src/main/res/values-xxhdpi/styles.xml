@@ -9,7 +9,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
     <style name="texto">
-        <item name="android:textSize">@dimen/texto</item>
+        <item name="android:textSize">@dimen/texto_normal</item>
     </style>
     <style name="boton">
         <item name="android:layout_width">@dimen/largo_boton</item>
@@ -21,6 +21,10 @@
     <style name="cuadro_texto_l">
         <item name="android:layout_width">@dimen/largo_texto_l</item>
         <item name="android:layout_height">@dimen/alto_texto_l</item>
+        <item name="android:textSize">@dimen/texto_normal</item>
+        <item name="android:background">@android:drawable/editbox_background</item>
+        <item name="android:lines" >1</item>
+
     </style>
     <style name="base_conectada">
         <item name="android:layout_width">@dimen/largo_texto_l</item>
@@ -32,6 +36,12 @@
     <style name="cuadro_texto_c">
         <item name="android:layout_width">@dimen/largo_texto_c</item>
         <item name="android:layout_height">@dimen/alto_texto_c</item>
+        <item name="android:textSize">@dimen/texto_normal</item>
+        <item name="android:background">@android:drawable/editbox_background</item>
+        <item name="android:lines">1</item>
+        <item name="android:text"> </item>
+
+
     </style>
     <style name="grafico">
         <item name="android:layout_width">@dimen/cuadro_grafico</item>
@@ -44,7 +54,11 @@
         <item name="android:layout_width">@dimen/largo_etiqueta</item>
         <item name="android:layout_height">@dimen/alto_etiqueta</item>
     </style>
-
+    <style name="boton_cabeza">
+        <item name="android:layout_width">45dp</item>
+        <item name="android:layout_height">@dimen/boton_cuadrado</item>
+        android:layout_height="42dp"
+    </style>
 
 
 </resources>
