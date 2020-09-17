@@ -1,25 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/componentes_cabeza"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:visibility="invisible">
 
     <LinearLayout
         android:id="@+id/grafico_xy"
+
         style="@style/grafico"
         android:layout_width="180dp"
-        android:layout_height="178dp"
+        android:layout_height="180dp"
+
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toTopOf="@+id/fuerza_normal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.469"
         app:layout_constraintStart_toStartOf="parent">
+
 
     </LinearLayout>
 
     <TextView
+
         android:id="@+id/suma"
+
         style="@style/cuadro_texto_c"
         app:layout_constraintBottom_toBottomOf="@+id/fuerza_lateral"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,8 +35,8 @@
     <TextView
         android:id="@+id/fuerza_normal"
         style="@style/cuadro_texto_c"
-        android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/velocidad"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/velocidad_cabeza"
         app:layout_constraintEnd_toStartOf="@+id/fuerza_lateral"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
@@ -45,27 +51,17 @@
         app:layout_constraintStart_toEndOf="@+id/fuerza_normal" />
 
 
-    <TextView
-        android:id="@+id/textVelocidad"
-        style="@style/etiqueta"
-        android:layout_marginEnd="8dp"
-        android:text="@string/vel_motor"
-        app:layout_constraintEnd_toStartOf="@+id/velocidad"
-        app:layout_constraintTop_toTopOf="@+id/velocidad" />
-
     <SeekBar
-        android:id="@+id/velocidad"
+        android:id="@+id/velocidad_cabeza"
         style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="233dp"
         android:layout_height="32dp"
         android:layout_marginTop="364dp"
-        android:layout_marginEnd="32dp"
         android:max="5"
         android:progress="4"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-
 
 
     <!-- botones del fotodiodo  -->
@@ -110,7 +106,7 @@
         android:textOff="@string/text_off"
         android:textOn="@string/text_on"
         app:layout_constraintBottom_toBottomOf="@+id/fotodiodo_left"
-        app:layout_constraintEnd_toEndOf="@+id/velocidad" />
+        app:layout_constraintEnd_toEndOf="@+id/suma" />
 
     <ToggleButton
         android:id="@+id/laser_down"
@@ -144,12 +140,12 @@
         android:textOff="@string/text_off"
         android:textOn="@string/text_on"
         app:layout_constraintEnd_toStartOf="@+id/laser_right"
-        app:layout_constraintTop_toBottomOf="@+id/velocidad" />
+        app:layout_constraintTop_toBottomOf="@+id/velocidad_cabeza" />
 
     <ToggleButton
         android:id="@+id/laser_right"
         style="@style/boton_cabeza"
-        android:layout_marginEnd="@dimen/espacio_botones_corto"
+        android:layout_marginEnd="48dp"
         android:textColor="@color/colorPrimary"
         android:textOff="@string/text_off"
         android:textOn="@string/text_on"

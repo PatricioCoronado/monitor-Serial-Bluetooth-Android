@@ -22,6 +22,7 @@
 
 <!-- Parte variable -->
     <include layout="@layout/base" />
+    <include layout="@layout/cabeza" />
 
 
    <!-- Fin parte variable -->

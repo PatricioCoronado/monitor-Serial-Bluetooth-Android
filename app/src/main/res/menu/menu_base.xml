@@ -30,6 +30,12 @@
         android:orderInCategory="10"
         android:title="acelerómetro"
         app:showAsAction="always|collapseActionView" />
+    <item
+        android:id="@+id/fotodiodo"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:orderInCategory="10"
+        android:title="fotodiodo"
+        app:showAsAction="always|collapseActionView" />
 
     <item android:id="@+id/preferencias"
         android:title="preferencias"
