@@ -3,7 +3,10 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.View;
-public class Grafico extends View {
+/*****************************************************************
+Esta clase extiende de un view.
+**************************************************************** */
+public class GraficoAcelerometro extends View {
     //paint
     Paint pincel,pincelRojo;
     //Variables para la cuadrícula central los ejes y el punto
@@ -14,11 +17,12 @@ public class Grafico extends View {
     //Flag para pintar el fondo (inicializar) o no
     private boolean noInicializado = true;//Se ejecuta init si es true
     //Constructor sin parámetros
-    public Grafico(Context context) {
+    public GraficoAcelerometro(Context context) {
         super(context);
     }
     /**********************************************************
     * Método que dibuja. Hay que dibujar cuadrículas y punto
+     *
     ******************************************************** */
     protected void onDraw(Canvas canvas) {
         if(noInicializado) {
@@ -63,4 +67,5 @@ public class Grafico extends View {
         y0= (int) y;
     }
 }
+/*************************************************************/
 /*************************************************************/

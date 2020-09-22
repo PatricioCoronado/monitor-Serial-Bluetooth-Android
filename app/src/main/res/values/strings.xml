@@ -8,7 +8,6 @@
     <string name="error_conexion">No se ha podido conectar con la base, selecciona otro dispositivo</string>
     <string name="nuevo_bluetooth">Selecciona otro dispositivo</string>
     <string name="vel_motor">velocidad</string>
-    <string name="text_on">1</string>
-    <string name="text_off">0</string>
-
+    <string name="text_on"> </string>
+    <string name="text_off"> </string>
 </resources>

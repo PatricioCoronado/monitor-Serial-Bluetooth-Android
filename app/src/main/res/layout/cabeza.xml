@@ -13,7 +13,6 @@
         style="@style/grafico"
         android:layout_width="180dp"
         android:layout_height="180dp"
-
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toTopOf="@+id/fuerza_normal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -69,6 +68,7 @@
     <ToggleButton
         android:id="@+id/fotodiodo_down"
         style="@style/boton_cabeza"
+        android:onClick="botonMoverCabeza"
         android:layout_marginStart="40dp"
         android:layout_marginTop="@dimen/espacio_vertical"
         android:textColor="@color/colorPrimary"
@@ -80,6 +80,7 @@
     <ToggleButton
         android:id="@+id/fotodiodo_up"
         style="@style/boton_cabeza"
+        android:onClick="botonMoverCabeza"
         android:layout_marginStart="40dp"
         android:layout_marginBottom="@dimen/espacio_vertical"
         android:textColor="@color/colorPrimary"
@@ -91,6 +92,7 @@
     <ToggleButton
         android:id="@+id/fotodiodo_left"
         style="@style/boton_cabeza"
+        android:onClick="botonMoverCabeza"
         android:layout_marginEnd="@dimen/espacio_botones_corto"
         android:textColor="@color/colorPrimary"
         android:textOff="@string/text_off"
@@ -102,6 +104,7 @@
     <ToggleButton
         android:id="@+id/fotodiodo_right"
         style="@style/boton_cabeza"
+        android:onClick="botonMoverCabeza"
         android:textColor="@color/colorPrimary"
         android:textOff="@string/text_off"
         android:textOn="@string/text_on"
@@ -111,6 +114,7 @@
     <ToggleButton
         android:id="@+id/laser_down"
         style="@style/boton_cabeza"
+        android:onClick="botonMoverCabeza"
         android:layout_marginStart="@dimen/espacio_botones_corto"
         android:layout_marginTop="@dimen/espacio_vertical"
         android:textColor="@color/colorPrimary"
@@ -122,7 +126,7 @@
     <ToggleButton
         android:id="@+id/laser_up"
         style="@style/boton_cabeza"
-
+        android:onClick="botonMoverCabeza"
         android:layout_marginStart="@dimen/espacio_botones_corto"
         android:layout_marginBottom="@dimen/espacio_vertical"
         android:textColor="@color/colorPrimary"
@@ -134,6 +138,7 @@
     <ToggleButton
         android:id="@+id/laser_left"
         style="@style/boton_cabeza"
+        android:onClick="botonMoverCabeza"
         android:layout_marginTop="@dimen/botones_velocidad"
         android:layout_marginEnd="@dimen/espacio_botones_corto"
         android:textColor="@color/colorPrimary"
@@ -145,6 +150,7 @@
     <ToggleButton
         android:id="@+id/laser_right"
         style="@style/boton_cabeza"
+        android:onClick="botonMoverCabeza"
         android:layout_marginEnd="48dp"
         android:textColor="@color/colorPrimary"
         android:textOff="@string/text_off"

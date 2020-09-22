@@ -90,7 +90,7 @@ public class ConnectedThread extends Thread
                                         if(car1=='Z') firma = Global.TipoRespuesta.PASOS;
                                     break;
                                     case 'Z':
-                                        if(car1=='T') firma = Global.TipoRespuesta.STOP;
+                                        if(car1=='P') firma = Global.TipoRespuesta.STOP;
                                     break;
                                     case 'K':
                                         if(car1=='K') firma = Global.TipoRespuesta.VERSION;
